@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Зрение Султана — как это меняется</title>
+<style>
+  :root{
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --border:         rgba(11,11,11,0.10);
+    --series-od:      #2a78d6; /* slot 1 blue */
+    --series-os:      #eb6834; /* slot 2 orange */
+    --good:           #0ca30c;
+    --warning:        #fab219;
+    --card-shadow:    0 1px 2px rgba(11,11,11,0.06), 0 4px 16px rgba(11,11,11,0.05);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:where(:not([data-theme="light"])){
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --text-muted:     #898781;
+      --grid:           #2c2c2a;
+      --baseline:       #383835;
+      --border:         rgba(255,255,255,0.10);
+      --series-od:      #3987e5;
+      --series-os:      #d95926;
+      --good:           #0ca30c;
+      --warning:        #fab219;
+    }
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--page);
+    color:var(--text-primary);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing:antialiased;
+    padding: 28px 16px 60px;
+  }
+  .wrap{max-width:920px;margin:0 auto;}
+
+  /* ---------- Header ---------- */
+  .hero{
+    text-align:center;
+    padding: 20px 12px 8px;
+    opacity:0;
+    animation: fadeUp .7s ease-out forwards;
+  }
+  .hero .eye-icon{width:72px;height:72px;margin-bottom:8px;}
+  .hero h1{
+    font-size: clamp(24px,5vw,34px);
+    margin: 4px 0 6px;
+    letter-spacing:-0.02em;
+  }
+  .hero p{
+    color:var(--text-secondary);
+    font-size:16px;
+    max-width:560px;
+    margin:0 auto;
+    line-height:1.5;
+  }
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  @keyframes fadeIn{
+    from{opacity:0;}
+    to{opacity:1;}
+  }
+
+  section{margin-top:34px;}
+  .card{
+    background:var(--surface-1);
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:var(--card-shadow);
+    padding:22px 20px;
+  }
+  h2.section-title{
+    font-size:19px;
+    margin: 0 0 4px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .section-sub{
+    color:var(--text-secondary);
+    font-size:14px;
+    margin:0 0 16px;
+  }
+
+  /* ---------- Timeline ---------- */
+  .timeline{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    position:relative;
+    padding-top:6px;
+  }
+  .timeline::before{
+    content:"";
+    position:absolute;
+    top:20px;
+    left:5%;
+    right:5%;
+    height:2px;
+    background:var(--grid);
+  }
+  .t-item{
+    flex:1;
+    text-align:center;
+    position:relative;
+    opacity:0;
+    animation: fadeUp .5s ease-out forwards;
+  }
+  .t-item:nth-child(1){animation-delay:.15s;}
+  .t-item:nth-child(2){animation-delay:.30s;}
+  .t-item:nth-child(3){animation-delay:.45s;}
+  .t-item:nth-child(4){animation-delay:.60s;}
+  .t-item:nth-child(5){animation-delay:.75s;}
+  .t-dot{
+    width:12px;height:12px;border-radius:50%;
+    background:var(--series-od);
+    margin:0 auto 10px;
+    border:3px solid var(--surface-1);
+    box-shadow:0 0 0 2px var(--series-od);
+    position:relative;
+    z-index:1;
+  }
+  .t-item.glasses .t-dot{background:var(--good); box-shadow:0 0 0 2px var(--good);}
+  .t-date{font-size:12.5px; font-weight:600;}
+  .t-age{font-size:11.5px; color:var(--text-muted); margin-top:2px;}
+
+  /* ---------- Chart ---------- */
+  .toggle-row{display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;}
+  .toggle-btn{
+    border:1px solid var(--border);
+    background:transparent;
+    color:var(--text-secondary);
+    padding:7px 14px;
+    border-radius:999px;
+    font-size:13.5px;
+    cursor:pointer;
+    font-family:inherit;
+    transition: all .15s ease;
+  }
+  .toggle-btn.active{
+    background:var(--text-primary);
+    color:var(--surface-1);
+    border-color:var(--text-primary);
+  }
+  .legend{display:flex; gap:18px; margin-bottom:10px; flex-wrap:wrap;}
+  .legend-item{display:flex; align-items:center; gap:7px; font-size:13.5px; color:var(--text-secondary);}
+  .legend-swatch{width:12px;height:12px;border-radius:3px;}
+  svg.chart{width:100%; height:auto; overflow:visible;}
+  .gridline{stroke:var(--grid); stroke-width:1;}
+  .axis-label{fill:var(--text-muted); font-size:11px;}
+  .x-label{fill:var(--text-secondary); font-size:11.5px;}
+  .line-od{fill:none; stroke:var(--series-od); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;}
+  .line-os{fill:none; stroke:var(--series-os); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;}
+  .dot-od{fill:var(--series-od); stroke:var(--surface-1); stroke-width:2;}
+  .dot-os{fill:var(--series-os); stroke:var(--surface-1); stroke-width:2;}
+  .dot-od, .dot-os{cursor:pointer;}
+  .val-label{font-size:11px; font-weight:600; font-variant-numeric:tabular-nums;}
+  .tooltip{
+    position:absolute;
+    pointer-events:none;
+    background:var(--text-primary);
+    color:var(--surface-1);
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:12.5px;
+    line-height:1.4;
+    transform:translate(-50%,-115%);
+    opacity:0;
+    transition:opacity .12s ease;
+    white-space:nowrap;
+    z-index:5;
+  }
+  .chart-holder{position:relative;}
+
+  /* ---------- Insight cards ---------- */
+  .insights{display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:14px;}
+  .insight{
+    background:var(--surface-1);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px 16px;
+    box-shadow:var(--card-shadow);
+    opacity:0;
+    animation: fadeUp .6s ease-out forwards;
+  }
+  .insight:nth-child(1){animation-delay:.05s;}
+  .insight:nth-child(2){animation-delay:.15s;}
+  .insight:nth-child(3){animation-delay:.25s;}
+  .insight:nth-child(4){animation-delay:.35s;}
+  .insight .ic{font-size:22px; margin-bottom:6px; display:block;}
+  .insight h3{font-size:14.5px; margin:0 0 6px;}
+  .insight p{font-size:13px; color:var(--text-secondary); line-height:1.5; margin:0;}
+
+  /* ---------- Explainers (accordion-ish) ---------- */
+  .explain-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px;}
+  .explain{
+    background:var(--surface-1);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:16px;
+    box-shadow:var(--card-shadow);
+  }
+  .explain h3{font-size:14.5px; margin:0 0 6px; display:flex; gap:8px; align-items:center;}
+  .explain p{font-size:13px; color:var(--text-secondary); line-height:1.55; margin:0;}
+  .badge{
+    display:inline-block; font-size:11px; font-weight:700; padding:2px 8px;
+    border-radius:999px; background:rgba(42,120,214,0.12); color:var(--series-od);
+  }
+
+  /* ---------- Tips list ---------- */
+  .tips{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px;}
+  .tip{
+    display:flex; gap:10px; align-items:flex-start;
+    background:var(--surface-1); border:1px solid var(--border); border-radius:12px; padding:12px 14px;
+    box-shadow:var(--card-shadow);
+  }
+  .tip-num{
+    flex:none; width:24px; height:24px; border-radius:50%;
+    background:var(--series-od); color:#fff; font-size:12px; font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .tip p{margin:0; font-size:13px; color:var(--text-secondary); line-height:1.5;}
+
+  /* ---------- Glasses card ---------- */
+  .glasses-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px;}
+  @media (max-width:480px){.glasses-grid{grid-template-columns:1fr;}}
+  .eye-card{
+    border:1px solid var(--border); border-radius:14px; padding:16px;
+    background:var(--surface-1); text-align:center;
+  }
+  .eye-card .eye-tag{font-size:12.5px; font-weight:700; color:var(--text-muted); letter-spacing:.04em;}
+  .eye-card .num{
+    font-size:32px; font-weight:700; margin:6px 0 2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .eye-card.od .num{color:var(--series-od);}
+  .eye-card.os .num{color:var(--series-os);}
+  .eye-card .sub{font-size:12px; color:var(--text-secondary);}
+
+  footer{
+    margin-top:36px; text-align:center; color:var(--text-muted); font-size:12px; line-height:1.6;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <svg class="eye-icon" viewBox="0 0 100 100" fill="none">
+      <path d="M5 50 C 20 20, 80 20, 95 50 C 80 80, 20 80, 5 50 Z" stroke="#2a78d6" stroke-width="4" fill="none"/>
+      <circle cx="50" cy="50" r="16" fill="#2a78d6" opacity="0.15"/>
+      <circle cx="50" cy="50" r="16" stroke="#2a78d6" stroke-width="4" fill="none"/>
+      <circle cx="50" cy="50" r="7" fill="#0b0b0b"/>
+    </svg>
+    <h1>Как менялось зрение Султана</h1>
+    <p>4 осмотра у офтальмолога + новые очки — с июля 2024 по январь 2026. Разобрали цифры и сделали понятную картинку.</p>
+  </div>
+
+  <!-- TIMELINE -->
+  <section>
+    <div class="card">
+      <h2 class="section-title">🗓️ Хронология осмотров</h2>
+      <p class="section-sub">5 документов: 4 осмотра у офтальмолога и один заказ очков</p>
+      <div class="timeline">
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-date">28.07.2024</div>
+          <div class="t-age">11 лет</div>
+        </div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-date">17.08.2024</div>
+          <div class="t-age">11 лет</div>
+        </div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-date">29.03.2025</div>
+          <div class="t-age">12 лет</div>
+        </div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-date">07.01.2026</div>
+          <div class="t-age">12–13 лет</div>
+        </div>
+        <div class="t-item glasses">
+          <div class="t-dot"></div>
+          <div class="t-date">07.01.2026</div>
+          <div class="t-age">🕶️ новые очки</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHART -->
+  <section>
+    <div class="card">
+      <h2 class="section-title">📈 Динамика зрения</h2>
+      <p class="section-sub">Чем больше минус (число ниже нуля), тем сильнее близорукость — глазу нужны более сильные линзы, чтобы видеть далёкие предметы чётко.</p>
+
+      <div class="toggle-row">
+        <button class="toggle-btn active" data-mode="sph">Близорукость (SPH, диоптрии)</button>
+        <button class="toggle-btn" data-mode="cyl">Астигматизм (CYL, диоптрии)</button>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--series-od)"></span>Правый глаз (OD)</div>
+        <div class="legend-item"><span class="legend-swatch" style="background:var(--series-os)"></span>Левый глаз (OS)</div>
+      </div>
+
+      <div class="chart-holder">
+        <svg id="chart" class="chart" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="tooltip" id="tooltip"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section>
+    <h2 class="section-title" style="margin-bottom:14px;">🔍 Что мы заметили</h2>
+    <div class="insights">
+      <div class="insight">
+        <span class="ic">👀</span>
+        <h3>Близорукость у обоих глаз</h3>
+        <p>На всех осмотрах диагноз один и тот же: близорукость средней степени + сложный миопический астигматизм на обоих глазах (OD и OS).</p>
+      </div>
+      <div class="insight">
+        <span class="ic">🌗</span>
+        <h3>Левый глаз — больше астигматизма</h3>
+        <p>Астигматизм (CYL) у левого глаза (OS) стабильно выше, чем у правого (OD) — от −2 до −3 D против −1 до −1.5 D у правого.</p>
+      </div>
+      <div class="insight">
+        <span class="ic">💧</span>
+        <h3>Капли атропина «сбросили» спазм</h3>
+        <p>После первого осмотра назначили капли атропина. На втором осмотре (17.08.2024) цифры временно улучшились — это нормально, так капли снимают перенапряжение мышцы глаза (спазм аккомодации), а не «лечат» саму близорукость.</p>
+      </div>
+      <div class="insight">
+        <span class="ic">✅</span>
+        <h3>Глаз здоров структурно</h3>
+        <p>Сетчатка, сосуды, глазное дно — везде отмечено «норма» на каждом осмотре. Проблема чисто оптическая (нужны линзы), а не болезнь глаза.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPLAINERS -->
+  <section>
+    <h2 class="section-title" style="margin-bottom:14px;">🧠 Разбор терминов</h2>
+    <div class="explain-grid">
+      <div class="explain">
+        <h3><span class="badge">SPH</span>Близорукость (миопия)</h3>
+        <p>Глаз чуть длиннее, чем нужно, поэтому далёкие предметы расплываются. Минус (например −4.75) — это сила линзы, которая нужна, чтобы вернуть чёткость. Чем больше минус, тем сильнее нужны очки.</p>
+      </div>
+      <div class="explain">
+        <h3><span class="badge">CYL</span>Астигматизм</h3>
+        <p>Роговица (передняя часть глаза) немного неровная — как мяч для регби вместо футбольного. Из-за этого картинка искажается в одном направлении. Исправляется отдельным «цилиндром» в линзе.</p>
+      </div>
+      <div class="explain">
+        <h3><span class="badge">Атропин</span>Капли для контроля роста</h3>
+        <p>Слабый раствор атропина назначают детям, чтобы притормозить рост близорукости и снять лишнее напряжение глазных мышц. Это не убирает уже имеющийся минус, а помогает не набирать новый слишком быстро.</p>
+      </div>
+      <div class="explain">
+        <h3><span class="badge">Очки</span>Финальный рецепт (07.01.2026)</h3>
+        <p>Выписаны очки для постоянного ношения (для дали): OD −4.75/−0.50, OS −4.00/−1.75, с покрытием линз 1.67. Немного мягче по астигматизму, чем «сырые» цифры осмотра — врачи специально немного не докручивают цилиндр, чтобы очки было комфортно носить.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- GLASSES -->
+  <section>
+    <div class="card">
+      <h2 class="section-title">🕶️ Новые очки Султана</h2>
+      <p class="section-sub">Заказаны 07.01.2026 — постоянное ношение, для дали, линзы индекс 1.67</p>
+      <div class="glasses-grid">
+        <div class="eye-card od">
+          <div class="eye-tag">ПРАВЫЙ ГЛАЗ (OD)</div>
+          <div class="num">−4.75 / −0.50</div>
+          <div class="sub">ось 180°</div>
+        </div>
+        <div class="eye-card os">
+          <div class="eye-tag">ЛЕВЫЙ ГЛАЗ (OS)</div>
+          <div class="num">−4.00 / −1.75</div>
+          <div class="sub">ось 175°</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section>
+    <h2 class="section-title" style="margin-bottom:14px;">💡 6 правил, которые помогут глазам</h2>
+    <div class="tips">
+      <div class="tip"><div class="tip-num">1</div><p>Читай при верхнем свете, а не только при свете настольной лампы — так глаз меньше устаёт.</p></div>
+      <div class="tip"><div class="tip-num">2</div><p>Каждые 45 минут за книгой, компьютером или у телевизора — перерыв 15 минут.</p></div>
+      <div class="tip"><div class="tip-num">3</div><p>До книги — не меньше 30–40 см, до монитора — 50–60 см.</p></div>
+      <div class="tip"><div class="tip-num">4</div><p>Не читай лёжа или на боку — каждый глаз видит текст под своим углом, и это сбивает зрение.</p></div>
+      <div class="tip"><div class="tip-num">5</div><p>Не щурься — это признак усталости глаз, лучше сделай паузу на 15 минут.</p></div>
+      <div class="tip"><div class="tip-num">6</div><p>Экраны (телефон/компьютер) — не больше 30–60 минут в день, и обязательно гулять на свежем воздухе.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    Составлено на основе 4 осмотров офтальмолога (TESLA-Med, Focusns) и заказа очков (optica_eyepro), июль 2024 — январь 2026.<br>
+    Это не медицинское заключение — точную трактовку и план лечения нужно уточнять у лечащего врача-офтальмолога.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const data = {
+    labels: ["28.07.24","17.08.24","29.03.25","07.01.26","Очки"],
+    sph: {
+      od: [-4.31, -3.75, -5.00, -4.75, -4.75],
+      os: [-4.25, -3.50, -4.50, -4.00, -4.00]
+    },
+    cyl: {
+      od: [-1.31, -1.00, -1.00, -1.50, -0.50],
+      os: [-2.13, -2.25, -2.75, -2.75, -1.75]
+    }
+  };
+
+  const svg = document.getElementById('chart');
+  const tooltip = document.getElementById('tooltip');
+  const holder = document.querySelector('.chart-holder');
+  const W = 720, H = 320;
+  const padL = 46, padR = 20, padT = 20, padB = 40;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  const ns = "http://www.w3.org/2000/svg";
+  function el(tag, attrs){
+    const e = document.createElementNS(ns, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+
+  let currentMode = 'sph';
+
+  function render(mode, animate){
+    svg.innerHTML = '';
+    const od = data[mode].od;
+    const os = data[mode].os;
+    const all = od.concat(os);
+    let min = Math.min(...all);
+    let max = Math.max(...all);
+    // padding on scale
+    min = Math.floor((min - 0.4)*2)/2;
+    max = Math.ceil((max + 0.4)*2)/2;
+    if (max > 0) max = 0; // keep 0 as ceiling reference where sensible
+    const range = max - min;
+
+    function x(i){ return padL + (i/(data.labels.length-1)) * plotW; }
+    function y(v){ return padT + (1 - (v - min)/range) * plotH; }
+
+    // gridlines
+    const steps = 4;
+    for (let s=0; s<=steps; s++){
+      const v = min + (range/steps)*s;
+      const yy = y(v);
+      svg.appendChild(el('line', {x1:padL, x2:W-padR, y1:yy, y2:yy, class:'gridline'}));
+      const t = el('text', {x: padL-8, y: yy+4, class:'axis-label', 'text-anchor':'end'});
+      t.textContent = v.toFixed(1);
+      svg.appendChild(t);
+    }
+
+    // x labels
+    data.labels.forEach((lab,i)=>{
+      const t = el('text', {x: x(i), y: H-14, class:'x-label', 'text-anchor':'middle'});
+      t.textContent = lab;
+      svg.appendChild(t);
+    });
+
+    function buildLine(arr, cls){
+      let d = '';
+      arr.forEach((v,i)=>{
+        d += (i===0?'M':'L') + x(i).toFixed(1) + ' ' + y(v).toFixed(1) + ' ';
+      });
+      const path = el('path', {d: d.trim(), class: cls});
+      const len = 1000;
+      if (animate){
+        path.style.strokeDasharray = len;
+        path.style.strokeDashoffset = len;
+        path.style.transition = 'stroke-dashoffset 1.1s ease-out';
+      }
+      svg.appendChild(path);
+      if (animate){
+        requestAnimationFrame(()=>{
+          requestAnimationFrame(()=>{ path.style.strokeDashoffset = 0; });
+        });
+      }
+      return path;
+    }
+
+    buildLine(od, 'line-od');
+    buildLine(os, 'line-os');
+
+    function buildDots(arr, cls, eyeLabel){
+      arr.forEach((v,i)=>{
+        const c = el('circle', {cx:x(i), cy:y(v), r:5, class:cls});
+        if (animate){
+          c.style.opacity = 0;
+          c.style.transition = `opacity .3s ease ${0.15*i + 0.6}s`;
+        }
+        c.addEventListener('mouseenter', (e)=>{
+          const rect = holder.getBoundingClientRect();
+          const svgRect = svg.getBoundingClientRect();
+          const px = svgRect.left - rect.left + (x(i)/W)*svgRect.width;
+          const py = svgRect.top - rect.top + (y(v)/H)*svgRect.height;
+          tooltip.style.left = px + 'px';
+          tooltip.style.top = py + 'px';
+          tooltip.innerHTML = `<b>${eyeLabel}</b> · ${data.labels[i]}<br>${v.toFixed(2)} D`;
+          tooltip.style.opacity = 1;
+        });
+        c.addEventListener('mouseleave', ()=>{ tooltip.style.opacity = 0; });
+        svg.appendChild(c);
+        if (animate){
+          requestAnimationFrame(()=>{
+            requestAnimationFrame(()=>{ c.style.opacity = 1; });
+          });
+        }
+      });
+    }
+    buildDots(od, 'dot-od', 'Правый глаз (OD)');
+    buildDots(os, 'dot-os', 'Левый глаз (OS)');
+  }
+
+  render(currentMode, true);
+
+  document.querySelectorAll('.toggle-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.toggle-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentMode = btn.dataset.mode;
+      render(currentMode, true);
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
