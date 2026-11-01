@@ -171,7 +171,7 @@
   }
   .t-item{
     flex:1;
-    min-width:78px;
+    min-width:72px;
     text-align:center;
     position:relative;
   }
@@ -217,7 +217,6 @@
     background:linear-gradient(180deg,#bfe0ff 0%, #e8f4ff 55%, #eef7e9 55%, #eef7e9 100%);
     aspect-ratio: 16/9;
   }
-  :root[data-theme="dark"] .demo-scene-wrap, @media (prefers-color-scheme:dark){ .demo-scene-wrap{ } }
   .demo-scene{width:100%; height:100%; transition:filter .15s ease;}
   .demo-controls{display:flex; align-items:center; gap:12px; margin-top:14px;}
   .demo-controls input[type=range]{flex:1; accent-color:var(--series-od);}
@@ -260,7 +259,7 @@
   svg.chart{width:100%; height:auto; overflow:visible;}
   .gridline{stroke:var(--grid); stroke-width:1;}
   .axis-label{fill:var(--text-muted); font-size:11px;}
-  .x-label{fill:var(--text-secondary); font-size:10.5px;}
+  .x-label{fill:var(--text-secondary); font-size:10px;}
   .line-od{fill:none; stroke:var(--series-od); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;}
   .line-os{fill:none; stroke:var(--series-os); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round;}
   .dot-od{fill:var(--series-od); stroke:var(--surface-1); stroke-width:2;}
@@ -350,9 +349,42 @@
   footer{
     margin-top:36px; text-align:center; color:var(--text-muted); font-size:12px; line-height:1.6;
   }
+
+  .icon{
+    width:1.15em; height:1.15em; flex:none;
+    vertical-align:-0.22em;
+    stroke:currentColor;
+    fill:none;
+    stroke-width:1.7;
+    stroke-linecap:round;
+    stroke-linejoin:round;
+  }
+  h2.section-title .icon{width:20px; height:20px; color:var(--series-od);}
+  .cic .icon{width:22px; height:22px; color:var(--warning-ink);}
+  .hstat .icon{width:14px; height:14px; color:var(--series-os); vertical-align:-2px;}
+  .insight .ic .icon{width:22px; height:22px; color:var(--series-od);}
+  .insight.flag .ic .icon{color:var(--warning-ink);}
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><line x1="3.5" y1="9.5" x2="20.5" y2="9.5"/><line x1="7.5" y1="3" x2="7.5" y2="7"/><line x1="16.5" y1="3" x2="16.5" y2="7"/><circle cx="8" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="12" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 L21.5 20 H2.5 Z" stroke-linejoin="round"/><line x1="12" y1="9.5" x2="12" y2="14.5"/><circle cx="12" cy="17.3" r="1" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-lens" viewBox="0 0 24 24"><path d="M12 4c3.5 2.6 3.5 13.4 0 16 C8.5 17.4 8.5 6.6 12 4Z"/><line x1="2.5" y1="12" x2="21.5" y2="12"/></symbol>
+    <symbol id="i-glasses" viewBox="0 0 24 24"><circle cx="6.3" cy="14" r="3.6"/><circle cx="17.7" cy="14" r="3.6"/><line x1="9.9" y1="12.8" x2="14.1" y2="12.8"/><path d="M2.7 13 C2.7 9 3.6 6.5 4.4 5.3"/><path d="M21.3 13 C21.3 9 20.4 6.5 19.6 5.3"/></symbol>
+    <symbol id="i-astig" viewBox="0 0 24 24"><ellipse cx="12" cy="12" rx="9" ry="6.2"/><line x1="12" y1="3.2" x2="12" y2="20.8"/><line x1="4.4" y1="12" x2="19.6" y2="12"/><path d="M12 3.2 L10.3 5.3 M12 3.2 L13.7 5.3"/><path d="M12 20.8 L10.3 18.7 M12 20.8 L13.7 18.7"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20 H21"/><path d="M3 20 V4"/><path d="M5.5 15 L10 11 L13.5 13.5 L20 6" stroke-linejoin="round"/><circle cx="20" cy="6" r="1.4" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.3" y1="15.3" x2="21" y2="21"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M3.5 5.5 C6 4.3 9 4.3 12 5.5 V19 C9 17.8 6 17.8 3.5 19 Z"/><path d="M20.5 5.5 C18 4.3 15 4.3 12 5.5 V19 C15 17.8 18 17.8 20.5 19 Z"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M8 10.5 C8 7 9.8 4.5 12 4.5 C14.2 4.5 16 7 16 10.5 C16 12.8 14.8 13.9 13.8 15 C13.2 15.6 13 16.2 13 17 H11 C11 16.2 10.8 15.6 10.2 15 C9.2 13.9 8 12.8 8 10.5 Z"/><line x1="10.4" y1="19.5" x2="13.6" y2="19.5"/><line x1="10.8" y1="21.5" x2="13.2" y2="21.5"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.5 12 C5.5 6.5 18.5 6.5 21.5 12 C18.5 17.5 5.5 17.5 2.5 12 Z"/><circle cx="12" cy="12" r="3.1"/></symbol>
+    <symbol id="i-contrast" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 3.5 A8.5 8.5 0 0 1 12 20.5 Z" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 3.5 C16 9 18.5 12.3 18.5 15.3 C18.5 19 15.6 21 12 21 C8.4 21 5.5 19 5.5 15.3 C5.5 12.3 8 9 12 3.5 Z" stroke-linejoin="round"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M8 12.3 L10.7 15 L16 9" stroke-linejoin="round"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><path d="M3 20 H21"/><path d="M5 16 L9.5 10.5 L13.5 13.5 L19.5 5" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
 <div class="wrap">
 
   <div class="hero">
@@ -366,12 +398,12 @@
         <path class="lid" d="M2 50 C 20 25, 80 25, 98 50 L98 50 C 80 40, 20 40, 2 50 Z" fill="var(--page)"/>
       </svg>
       <h1>Как менялось зрение Султана</h1>
-      <p>5 осмотров у офтальмолога + очки — с июля 2024 по август 2026. Разобрали цифры, добавили новый осмотр и сделали историю понятной и наглядной.</p>
+      <p>6 осмотров у офтальмолога + очки — с июля 2024 по октябрь 2026. Разобрали цифры, добавили новый осмотр и сделали историю понятной и наглядной.</p>
       <div class="hero-stats">
-        <div class="hstat"><b>5</b>осмотров</div>
-        <div class="hstat"><b>13</b>месяцев наблюдения</div>
+        <div class="hstat"><b>6</b>осмотров</div>
+        <div class="hstat"><b>27</b>месяцев наблюдения</div>
         <div class="hstat"><b>2</b>глаза под контролем</div>
-        <div class="hstat"><b>1</b>новая находка ⚠️</div>
+        <div class="hstat"><b>3</b>визита подряд астигматизм растёт <svg class="icon"><use href="#i-alert"/></svg></div>
       </div>
     </div>
   </div>
@@ -379,8 +411,8 @@
   <!-- TIMELINE -->
   <section class="reveal">
     <div class="card">
-      <h2 class="section-title">🗓️ Хронология осмотров</h2>
-      <p class="section-sub">6 документов: 5 осмотров у офтальмолога и один заказ очков</p>
+      <h2 class="section-title"><svg class="icon"><use href="#i-calendar"/></svg> Хронология осмотров</h2>
+      <p class="section-sub">7 документов: 6 осмотров у офтальмолога и один заказ очков</p>
       <div class="timeline">
         <div class="t-item">
           <div class="t-dot"></div>
@@ -405,11 +437,16 @@
         <div class="t-item glasses">
           <div class="t-dot"></div>
           <div class="t-date">07.01.26</div>
-          <div class="t-age">🕶️ очки</div>
+          <div class="t-age"><svg class="icon" style="width:12px;height:12px;vertical-align:-2px;"><use href="#i-glasses"/></svg> очки</div>
+        </div>
+        <div class="t-item">
+          <div class="t-dot"></div>
+          <div class="t-date">28.08.26</div>
+          <div class="t-age">13 лет</div>
         </div>
         <div class="t-item latest">
           <div class="t-dot"></div>
-          <div class="t-date">28.08.26</div>
+          <div class="t-date">31.10.26</div>
           <div class="t-age">13 лет</div>
           <div class="t-tag">новое</div>
         </div>
@@ -420,10 +457,10 @@
   <!-- CALLOUT -->
   <section class="reveal">
     <div class="callout">
-      <div class="cic">⚠️</div>
+      <div class="cic"><svg class="icon"><use href="#i-alert"/></svg></div>
       <div>
-        <h3>Главное из нового осмотра (28.08.2026)</h3>
-        <p>Базовая близорукость (SPH) почти не изменилась — это хороший знак. Но <b>астигматизм заметно вырос</b>, особенно на левом глазу (с −2.75 до −3.50 D). Это самый большой скачок за всё время наблюдения. Текущие очки корректируют астигматизм слабее, чем нужно сейчас — стоит спросить врача, не пора ли обновить рецепт очков.</p>
+        <h3>Главное из нового осмотра (31.10.2026)</h3>
+        <p>Это уже не разовый скачок: <b>астигматизм растёт три визита подряд</b>. С января 2026 по октябрь 2026 он вырос с −1.50 до −2.50 D на правом глазу и с −2.75 до −3.50 D на левом. Базовая близорукость (SPH) при этом почти не меняется — это хорошо. Текущие очки (с января) отстают от факта уже примерно на 2.0 D — важно обсудить с врачом новый рецепт.</p>
       </div>
     </div>
   </section>
@@ -431,16 +468,14 @@
   <!-- MECHANISM -->
   <section class="reveal">
     <div class="card">
-      <h2 class="section-title">🧬 Почему так происходит</h2>
+      <h2 class="section-title"><svg class="icon"><use href="#i-lens"/></svg> Почему так происходит</h2>
       <p class="section-sub">Коротко о том, что вообще значит «близорукость» и «астигматизм» — на пальцах</p>
       <div class="mech-grid">
         <div class="mech-svg-wrap">
           <svg width="260" height="170" viewBox="0 0 260 170">
-            <!-- eyeball too long -->
             <ellipse cx="120" cy="85" rx="95" ry="62" fill="none" stroke="var(--series-od)" stroke-width="3"/>
             <ellipse cx="228" cy="85" rx="10" ry="30" fill="var(--series-od)" opacity="0.12"/>
             <line x1="228" y1="55" x2="228" y2="115" stroke="var(--series-od)" stroke-width="3"/>
-            <!-- light rays converging in front of retina -->
             <line x1="10" y1="55" x2="188" y2="85" stroke="var(--series-os)" stroke-width="2"/>
             <line x1="10" y1="115" x2="188" y2="85" stroke="var(--series-os)" stroke-width="2"/>
             <line x1="188" y1="85" x2="228" y2="65" stroke="var(--series-os)" stroke-width="2" stroke-dasharray="4 3"/>
@@ -461,7 +496,7 @@
   <!-- BLUR DEMO -->
   <section class="reveal">
     <div class="card">
-      <h2 class="section-title">👓 Демо: как видно без очков</h2>
+      <h2 class="section-title"><svg class="icon"><use href="#i-glasses"/></svg> Демо: как видно без очков</h2>
       <p class="section-sub">Двигай ползунок — от «без коррекции» до «в очках». Это упрощённая иллюстрация, не точная симуляция диоптрий.</p>
       <div class="demo-scene-wrap">
         <svg class="demo-scene" id="blurScene" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid slice">
@@ -489,7 +524,7 @@
   <!-- ASTIGMATISM DEMO -->
   <section class="reveal">
     <div class="card">
-      <h2 class="section-title">🌀 Демо: что такое астигматизм</h2>
+      <h2 class="section-title"><svg class="icon"><use href="#i-astig"/></svg> Демо: что такое астигматизм</h2>
       <p class="section-sub">При астигматизме линии в одном направлении видно резко, а в другом — размыто. Нажми кнопку, чтобы сравнить.</p>
       <div class="astig-toggle">
         <button class="toggle-btn active" data-astig="normal">Обычный глаз</button>
@@ -534,7 +569,7 @@
   <!-- CHART -->
   <section class="reveal">
     <div class="card">
-      <h2 class="section-title">📈 Динамика зрения</h2>
+      <h2 class="section-title"><svg class="icon"><use href="#i-chart"/></svg> Динамика зрения</h2>
       <p class="section-sub">Чем больше минус (число ниже нуля), тем сильнее близорукость или астигматизм — глазу нужны более сильные линзы, чтобы видеть чётко.</p>
 
       <div class="toggle-row">
@@ -556,44 +591,44 @@
 
   <!-- INSIGHTS -->
   <section class="reveal">
-    <h2 class="section-title" style="margin-bottom:14px;">🔍 Что мы заметили</h2>
+    <h2 class="section-title" style="margin-bottom:14px;"><svg class="icon"><use href="#i-search"/></svg> Что мы заметили</h2>
     <div class="insights">
       <div class="insight flag">
-        <span class="ic">📈</span>
-        <h3>Астигматизм резко вырос</h3>
-        <p>28.08.2026 — самый большой скачок CYL за весь период, особенно слева (OS: −2.75 → −3.50). Это стоит обсудить с врачом отдельно.</p>
+        <span class="ic"><svg class="icon"><use href="#i-trend"/></svg></span>
+        <h3>Астигматизм растёт три визита подряд</h3>
+        <p>Это уже устойчивый тренд, а не разовый скачок: с января по октябрь 2026 CYL вырос на обоих глазах. Главный повод обсудить новый рецепт очков с врачом.</p>
       </div>
       <div class="insight">
-        <span class="ic">👀</span>
+        <span class="ic"><svg class="icon"><use href="#i-eye"/></svg></span>
         <h3>Близорукость почти не растёт</h3>
-        <p>Базовый минус (SPH) держится примерно на одном уровне последние два визита — хороший сигнал, что лечение работает.</p>
+        <p>Базовый минус (SPH) за 2+ года вырос совсем немного, особенно у левого глаза — хороший сигнал, что лечение сдерживает рост.</p>
       </div>
       <div class="insight">
-        <span class="ic">🌗</span>
-        <h3>Левый глаз — больше астигматизма</h3>
-        <p>Астигматизм у левого глаза (OS) стабильно выше, чем у правого (OD), и разрыв между глазами продолжает расти.</p>
+        <span class="ic"><svg class="icon"><use href="#i-contrast"/></svg></span>
+        <h3>Разрыв между глазами меняется</h3>
+        <p>Долго левый глаз (OS) обгонял правый по астигматизму, но на последнем визите именно правый (OD) прибавил больше всего — глаза «выравниваются» по CYL.</p>
       </div>
       <div class="insight">
-        <span class="ic">💧</span>
+        <span class="ic"><svg class="icon"><use href="#i-drop"/></svg></span>
         <h3>Капли атропина «сбросили» спазм</h3>
         <p>После первого осмотра назначили капли атропина. На втором осмотре (17.08.2024) цифры временно улучшились — это нормально, так капли снимают перенапряжение мышцы глаза, а не «лечат» саму близорукость.</p>
       </div>
       <div class="insight">
-        <span class="ic">✅</span>
+        <span class="ic"><svg class="icon"><use href="#i-check"/></svg></span>
         <h3>Глаз здоров структурно</h3>
         <p>Сетчатка, сосуды, глазное дно — везде отмечено «норма» на каждом осмотре. Проблема чисто оптическая (нужны линзы), а не болезнь глаза.</p>
       </div>
       <div class="insight">
-        <span class="ic">🕶️</span>
-        <h3>Очки могут отставать от глаз</h3>
-        <p>Текущие очки (январь 2026) корректируют астигматизм заметно слабее, чем показал последний осмотр — особенно левый глаз.</p>
+        <span class="ic"><svg class="icon"><use href="#i-glasses"/></svg></span>
+        <h3>Очки заметно отстают от глаз</h3>
+        <p>Текущие очки (январь 2026) корректируют астигматизм заметно слабее, чем показал последний осмотр — разрыв уже около 2.0 D на правом глазу.</p>
       </div>
     </div>
   </section>
 
   <!-- EXPLAINERS -->
   <section class="reveal">
-    <h2 class="section-title" style="margin-bottom:14px;">🧠 Разбор терминов</h2>
+    <h2 class="section-title" style="margin-bottom:14px;"><svg class="icon"><use href="#i-book"/></svg> Разбор терминов</h2>
     <div class="explain-grid">
       <div class="explain">
         <h3><span class="badge">SPH</span>Близорукость (миопия)</h3>
@@ -609,7 +644,7 @@
       </div>
       <div class="explain">
         <h3><span class="badge">Очки</span>Текущий рецепт (07.01.2026)</h3>
-        <p>Выписаны очки для постоянного ношения (для дали): OD −4.75/−0.50, OS −4.00/−1.75, с покрытием линз 1.67. После осмотра 28.08.2026 астигматизм вырос сильнее, чем компенсируют эти очки — возможно, нужен новый рецепт.</p>
+        <p>Выписаны очки для постоянного ношения (для дали): OD −4.75/−0.50, OS −4.00/−1.75, с покрытием линз 1.67. После осмотров 28.08 и 31.10.2026 астигматизм вырос сильнее, чем компенсируют эти очки — нужен новый рецепт.</p>
       </div>
     </div>
   </section>
@@ -617,20 +652,20 @@
   <!-- GLASSES -->
   <section class="reveal">
     <div class="card">
-      <h2 class="section-title">🕶️ Текущие очки Султана</h2>
+      <h2 class="section-title"><svg class="icon"><use href="#i-glasses"/></svg> Текущие очки Султана</h2>
       <p class="section-sub">Заказаны 07.01.2026 — постоянное ношение, для дали, линзы индекс 1.67</p>
       <div class="glasses-grid">
         <div class="eye-card od">
           <div class="eye-tag">ПРАВЫЙ ГЛАЗ (OD)</div>
           <div class="num">−4.75 / −0.50</div>
           <div class="sub">ось 180°</div>
-          <div class="now">сейчас по осмотру: −4.50 / −2.00</div>
+          <div class="now">сейчас по осмотру: −4.75 / −2.50</div>
         </div>
         <div class="eye-card os">
           <div class="eye-tag">ЛЕВЫЙ ГЛАЗ (OS)</div>
           <div class="num">−4.00 / −1.75</div>
           <div class="sub">ось 175°</div>
-          <div class="now">сейчас по осмотру: −4.00 / −3.50</div>
+          <div class="now">сейчас по осмотру: −4.25 / −3.50</div>
         </div>
       </div>
     </div>
@@ -638,10 +673,10 @@
 
   <!-- TIPS -->
   <section class="reveal">
-    <h2 class="section-title" style="margin-bottom:14px;">💡 6 правил, которые помогут глазам</h2>
+    <h2 class="section-title" style="margin-bottom:14px;"><svg class="icon"><use href="#i-bulb"/></svg> 6 правил, которые помогут глазам</h2>
     <div class="tips">
       <div class="tip"><div class="tip-num">1</div><p>Читай при верхнем свете, а не только при свете настольной лампы — так глаз меньше устаёт.</p></div>
-      <div class="tip"><div class="tip-num">2</div><p>Каждые 45 минут за книгой, компьютером или у телевизора — перерыв 15 минут.</p></div>
+      <div class="tip"><div class="tip-num">2</div><p>Каждые 45 минут за книгой, компьютером или у телевизора — перерыв 15 минут (или правило 20-20-20: каждые 20 минут — 20 секунд смотреть вдаль).</p></div>
       <div class="tip"><div class="tip-num">3</div><p>До книги — не меньше 30–40 см, до монитора — 50–60 см.</p></div>
       <div class="tip"><div class="tip-num">4</div><p>Не читай лёжа или на боку — каждый глаз видит текст под своим углом, и это сбивает зрение.</p></div>
       <div class="tip"><div class="tip-num">5</div><p>Не щурься — это признак усталости глаз, лучше сделай паузу на 15 минут.</p></div>
@@ -650,7 +685,7 @@
   </section>
 
   <footer>
-    Составлено на основе 5 осмотров офтальмолога (TESLA-Med, Focusns) и заказа очков (optica_eyepro), июль 2024 — август 2026.<br>
+    Составлено на основе 6 осмотров офтальмолога (TESLA-Med, Focusns) и заказа очков (optica_eyepro), июль 2024 — октябрь 2026.<br>
     Это не медицинское заключение — точную трактовку и план лечения нужно уточнять у лечащего врача-офтальмолога.
   </footer>
 
@@ -659,17 +694,17 @@
 <script>
 (function(){
   const data = {
-    labels: ["28.07.24","17.08.24","29.03.25","07.01.26","Очки","28.08.26"],
+    labels: ["28.07.24","17.08.24","29.03.25","07.01.26","Очки","28.08.26","31.10.26"],
     sph: {
-      od: [-4.31, -3.75, -5.00, -4.75, -4.75, -4.50],
-      os: [-4.25, -3.50, -4.50, -4.00, -4.00, -4.00]
+      od: [-4.31, -3.75, -5.00, -4.75, -4.75, -4.50, -4.75],
+      os: [-4.25, -3.50, -4.50, -4.00, -4.00, -4.00, -4.25]
     },
     cyl: {
-      od: [-1.31, -1.00, -1.00, -1.50, -0.50, -2.00],
-      os: [-2.13, -2.25, -2.75, -2.75, -1.75, -3.50]
+      od: [-1.31, -1.00, -1.00, -1.50, -0.50, -2.00, -2.50],
+      os: [-2.13, -2.25, -2.75, -2.75, -1.75, -3.50, -3.50]
     }
   };
-  const latestIdx = 5;
+  const latestIdx = data.labels.length - 1;
 
   const svg = document.getElementById('chart');
   const tooltip = document.getElementById('tooltip');
@@ -725,7 +760,7 @@
         d += (i===0?'M':'L') + x(i).toFixed(1) + ' ' + y(v).toFixed(1) + ' ';
       });
       const path = el('path', {d: d.trim(), class: cls});
-      const len = 1200;
+      const len = 1400;
       if (animate){
         path.style.strokeDasharray = len;
         path.style.strokeDashoffset = len;
@@ -750,7 +785,7 @@
         const c = el('circle', {cx:x(i), cy:y(v), r:r, class: cls + (isLatest ? ' dot-latest' : '')});
         if (animate){
           c.style.opacity = 0;
-          c.style.transition = `opacity .3s ease ${0.12*i + 0.6}s`;
+          c.style.transition = `opacity .3s ease ${0.1*i + 0.6}s`;
         }
         c.addEventListener('mouseenter', (e)=>{
           const rect = holder.getBoundingClientRect();
@@ -790,7 +825,7 @@
   const blurSlider = document.getElementById('blurSlider');
   const blurScene = document.getElementById('blurScene');
   function applyBlur(v){
-    const amt = (100 - v) / 100 * 9; // 0..9px
+    const amt = (100 - v) / 100 * 9;
     blurScene.style.filter = amt > 0.2 ? `blur(${amt.toFixed(1)}px)` : 'none';
   }
   applyBlur(0);
